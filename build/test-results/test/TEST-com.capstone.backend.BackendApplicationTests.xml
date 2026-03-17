@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.capstone.backend.BackendApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-03-17T14:16:28.212Z" hostname="gimjun-won-ui-MacBookPro.local" time="1.476">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.capstone.backend.BackendApplicationTests" time="0.224"/>
+  <system-out><![CDATA[23:16:28.250 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.capstone.backend.BackendApplicationTests]: BackendApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+23:16:28.283 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.capstone.backend.BackendApplication for test class com.capstone.backend.BackendApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.11)
+
+2026-03-17T23:16:28.417+09:00  INFO 44659 --- [backend] [    Test worker] c.c.backend.BackendApplicationTests      : Starting BackendApplicationTests using Java 21.0.10 with PID 44659 (started by gimjun-won in /Users/gimjun-won/Desktop/backend)
+2026-03-17T23:16:28.417+09:00  INFO 44659 --- [backend] [    Test worker] c.c.backend.BackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2026-03-17T23:16:28.607+09:00  INFO 44659 --- [backend] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-17T23:16:28.623+09:00  INFO 44659 --- [backend] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 13 ms. Found 1 JPA repository interface.
+2026-03-17T23:16:28.764+09:00  INFO 44659 --- [backend] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-17T23:16:28.778+09:00  INFO 44659 --- [backend] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.42.Final
+2026-03-17T23:16:28.788+09:00  INFO 44659 --- [backend] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-03-17T23:16:28.869+09:00  INFO 44659 --- [backend] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-17T23:16:28.878+09:00  INFO 44659 --- [backend] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-17T23:16:28.936+09:00  INFO 44659 --- [backend] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@39a865c1
+2026-03-17T23:16:28.937+09:00  INFO 44659 --- [backend] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-17T23:16:28.963+09:00  INFO 44659 --- [backend] [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-17T23:16:29.159+09:00  INFO 44659 --- [backend] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-17T23:16:29.183+09:00  INFO 44659 --- [backend] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+]]>&#x1f525;<![CDATA[ SecurityConfig 로드됨
+2026-03-17T23:16:29.283+09:00  WARN 44659 --- [backend] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-17T23:16:29.350+09:00  INFO 44659 --- [backend] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsService
+2026-03-17T23:16:29.459+09:00  INFO 44659 --- [backend] [    Test worker] c.c.backend.BackendApplicationTests      : Started BackendApplicationTests in 1.129 seconds (process running for 1.468)
+]]></system-out>
+  <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (/Users/gimjun-won/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.17.8/f09415827a71be7ed621c7bd02550678f28bc81c/byte-buddy-agent-1.17.8.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
