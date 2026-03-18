@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.capstone.backend.global.jwt.JwtFilterTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-03-18T03:54:43.926Z" hostname="gimjun-won-ui-MacBookPro.local" time="0.005">
-  <properties/>
-  <testcase name="invalidBearerTokenDoesNotSetAuthentication()" classname="com.capstone.backend.global.jwt.JwtFilterTest" time="0.002"/>
-  <testcase name="validBearerTokenSetsAuthentication()" classname="com.capstone.backend.global.jwt.JwtFilterTest" time="0.002"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
