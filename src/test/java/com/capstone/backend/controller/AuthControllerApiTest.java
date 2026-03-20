@@ -2,10 +2,14 @@ package com.capstone.backend.controller;
 
 import com.capstone.backend.dto.SignupRequest;
 import com.capstone.backend.entity.User;
+import com.capstone.backend.global.exception.ConflictException;
 import com.capstone.backend.global.exception.GlobalExceptionHandler;
+import com.capstone.backend.global.exception.UnauthorizedException;
 import com.capstone.backend.global.jwt.JwtFilter;
 import com.capstone.backend.global.jwt.JwtUtil;
 import com.capstone.backend.security.SecurityConfig;
+import com.capstone.backend.security.oauth.CustomOAuth2UserService;
+import com.capstone.backend.security.oauth.OAuth2AuthenticationSuccessHandler;
 import com.capstone.backend.service.AuthService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +28,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthController.class)
+@WebMvcTest(
+        value = AuthController.class,
+        properties = "jwt.secret=4f9a2c7e1b6d8a0c3e5f7b9d2a4c6e8f"
+)
 @Import({SecurityConfig.class, JwtFilter.class, JwtUtil.class, GlobalExceptionHandler.class})
 class AuthControllerApiTest {
 
@@ -36,6 +43,12 @@ class AuthControllerApiTest {
 
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private CustomOAuth2UserService customOAuth2UserService;
+
+    @MockBean
+    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     @Test
     void signupReturnsCreated() throws Exception {
@@ -74,9 +87,63 @@ class AuthControllerApiTest {
     }
 
     @Test
-    void meReturnsUnauthorizedWithoutToken() throws Exception {
+    void signupReturnsConflictForDuplicateEmail() throws Exception {
+        when(authService.signup(any(SignupRequest.class))).thenThrow(new ConflictException("이미 존재하는 이메일입니다."));
+
+        mockMvc.perform(post("/api/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "new@example.com",
+                                  "password": "pw1234",
+                                  "name": "New User"
+                                }
+                                """))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.error").value("Conflict"))
+                .andExpect(jsonPath("$.message").value("이미 존재하는 이메일입니다."));
+    }
+
+    @Test
+    void loginReturnsUnauthorizedForInvalidCredentials() throws Exception {
+        when(authService.login(any())).thenThrow(new UnauthorizedException("아이디 또는 비밀번호가 잘못되었습니다."));
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "user@example.com",
+                                  "password": "pw1234"
+                                }
+                                """))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status").value(401))
+                .andExpect(jsonPath("$.error").value("Unauthorized"))
+                .andExpect(jsonPath("$.message").value("아이디 또는 비밀번호가 잘못되었습니다."));
+    }
+
+    @Test
+    void loginReturnsBadRequestForInvalidPayload() throws Exception {
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "",
+                                  "password": "123"
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.error").value("Bad Request"))
+                .andExpect(jsonPath("$.message").isNotEmpty());
+    }
+
+    @Test
+    void meReturnsOkWithoutTokenWhenSecurityIsOpenForFrontendDevelopment() throws Exception {
         mockMvc.perform(get("/api/auth/me"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isOk())
+                .andExpect(content().string(""));
     }
 
     @Test

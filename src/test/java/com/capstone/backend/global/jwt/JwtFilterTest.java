@@ -14,7 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JwtFilterTest {
 
-    private final JwtUtil jwtUtil = new JwtUtil("mysecretkeymysecretkeymysecretkey", 3600000);
+    private static final String TEST_JWT_SECRET = "4f9a2c7e1b6d8a0c3e5f7b9d2a4c6e8f";
+
+    private final JwtUtil jwtUtil = new JwtUtil(TEST_JWT_SECRET, 3600000);
     private final JwtFilter jwtFilter = new JwtFilter(jwtUtil);
 
     @AfterEach

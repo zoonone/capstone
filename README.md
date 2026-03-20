@@ -1,45 +1,63 @@
-# 🛠 Spring Boot JWT Authentication Server
+# Spring Boot Authentication Server
 
-## 📌 프로젝트 소개
+Spring Boot 3 기반 인증 서버입니다. 로컬 회원가입/로그인, JWT 발급, OAuth2 로그인 연동, 기본 보안 설정을 포함합니다.
 
-Spring Boot 기반으로 구현한 **JWT 인증 서버**입니다.
-회원가입, 로그인, JWT 토큰 발급 및 인증 기능을 제공합니다.
+## 주요 기능
 
----
+- 로컬 회원가입 시 `BCryptPasswordEncoder`로 비밀번호 해시 저장
+- 로컬 로그인 시 JWT access token 발급
+- 로그인 실패 시 `"아이디 또는 비밀번호가 잘못되었습니다."`로 통일된 응답 반환
+- Google, Kakao, Naver OAuth2 로그인 지원
+- JWT 인증 필터를 통한 사용자 식별
+- 입력값 검증과 예외별 HTTP 상태 코드 응답
 
-## 🚀 기술 스택
+## 기술 스택
 
-* **Backend**: Spring Boot 3
-* **Language**: Java
-* **Security**: Spring Security
-* **Authentication**: JWT (Json Web Token)
-* **Build Tool**: Gradle
+- Java 17
+- Spring Boot 3
+- Spring Security
+- Spring Security OAuth2 Client
+- Spring Data JPA
+- MySQL
+- JJWT
+- Gradle
 
----
+## API
 
-## ✨ 주요 기능
+### `POST /api/auth/signup`
 
-### 1. 회원가입 (Signup)
+회원가입을 처리합니다.
 
-* 이메일, 비밀번호, 이름으로 회원가입
-* 비밀번호는 **BCrypt 암호화** 적용
+Request
 
+```json
+{
+  "email": "new@example.com",
+  "password": "pw1234",
+  "name": "New User"
+}
 ```
-POST /api/auth/signup
+
+Response
+
+```text
+회원가입 성공
 ```
 
----
+### `POST /api/auth/login`
 
-### 2. 로그인 (Login)
+이메일과 비밀번호로 로그인하고 JWT를 발급합니다.
 
-* 이메일 + 비밀번호 인증
-* 성공 시 JWT 토큰 발급
+Request
 
+```json
+{
+  "email": "user@example.com",
+  "password": "pw1234"
+}
 ```
-POST /api/auth/login
-```
 
-**Response**
+Response
 
 ```json
 {
@@ -47,89 +65,105 @@ POST /api/auth/login
 }
 ```
 
----
+### `GET /api/auth/me`
 
-### 3. JWT 인증
+현재 인증된 사용자의 이메일을 반환합니다. 인증 정보가 없으면 빈 문자열을 반환합니다.
 
-* 요청 Header에 JWT 포함 시 인증 처리
-* Stateless 방식 (세션 미사용)
+### `GET /api/auth/oauth2/url/{provider}`
 
-```
-Authorization: Bearer {JWT_TOKEN}
-```
+프론트엔드에서 사용할 OAuth2 시작 URL을 반환합니다.
 
----
+예시:
 
-### 4. 인증 테스트 API
-
-```
-GET /api/test
+```text
+/oauth2/authorization/google
 ```
 
-* JWT가 유효하면 접근 가능
+### `GET /`
 
----
+서버 헬스체크용 기본 엔드포인트입니다.
 
-## 🔐 인증 흐름
+## 인증 흐름
 
+1. 사용자가 `/api/auth/signup`으로 가입합니다.
+2. 서버는 비밀번호를 BCrypt로 암호화해 저장합니다.
+3. 사용자가 `/api/auth/login`으로 로그인합니다.
+4. 서버는 비밀번호를 `matches()`로 검증하고 JWT를 발급합니다.
+5. 클라이언트는 `Authorization: Bearer {token}` 헤더로 요청합니다.
+6. `JwtFilter`가 토큰을 검증하고 `SecurityContext`에 인증 정보를 저장합니다.
+
+## 에러 응답 형식
+
+모든 예외 응답은 아래 형식을 사용합니다.
+
+```json
+{
+  "status": 401,
+  "error": "Unauthorized",
+  "message": "아이디 또는 비밀번호가 잘못되었습니다."
+}
 ```
-회원가입 → 로그인 → JWT 발급 → API 요청 시 JWT 검증
+
+대표 상태 코드:
+
+- `400 Bad Request`: DTO 검증 실패
+- `401 Unauthorized`: 로그인 실패, 인증 실패
+- `409 Conflict`: 중복 이메일 회원가입
+- `500 Internal Server Error`: 서버 내부 오류
+
+## 환경 변수
+
+`.env.example`을 참고해서 환경 변수를 설정할 수 있습니다.
+
+필수 또는 주요 변수:
+
+- `JWT_SECRET`
+- `JWT_EXPIRATION_MS`
+- `DB_URL`
+- `DB_USERNAME`
+- `DB_PASSWORD`
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `KAKAO_CLIENT_ID`
+- `KAKAO_CLIENT_SECRET`
+- `NAVER_CLIENT_ID`
+- `NAVER_CLIENT_SECRET`
+- `OAUTH2_REDIRECT_URI`
+
+`JWT_SECRET`은 최소 32바이트 이상 길이의 랜덤 문자열을 사용해야 합니다.
+
+예시:
+
+```bash
+export JWT_SECRET="$(openssl rand -hex 32)"
 ```
 
----
+## 실행
 
-## 🧱 프로젝트 구조
-
+```bash
+./gradlew bootRun
 ```
+
+## 테스트
+
+전체 테스트 실행:
+
+```bash
+./gradlew test
+```
+
+## 프로젝트 구조
+
+```text
 src/main/java/com/capstone/backend
- ┣ config
- ┃ ┗ SecurityConfig
- ┣ controller
- ┃ ┣ AuthController
- ┃ ┗ TestController
- ┣ security
- ┃ ┣ JwtProvider
- ┃ ┗ JwtAuthenticationFilter
- ┣ service
- ┃ ┗ AuthService
- ┣ repository
- ┗ entity
+├── controller
+├── dto
+├── entity
+├── global
+│   ├── exception
+│   └── jwt
+├── repository
+├── security
+│   └── oauth
+└── service
 ```
-
----
-
-## ⚙️ Security 설정
-
-* CSRF 비활성화
-* 세션 사용 안함 (STATELESS)
-* JWT 필터 적용
-* `/api/auth/**` 경로는 인증 없이 접근 허용
-
----
-
-## 📮 API 테스트 방법 (Postman)
-
-1. 로그인 요청
-2. JWT 토큰 복사
-3. Authorization 설정
-
-```
-Type: Bearer Token
-Token: 발급받은 JWT
-```
-
----
-
-## 📌 향후 계획
-
-* [ ] 사용자 정보 조회 API (`/api/user/me`)
-* [ ] OAuth 로그인 (카카오 / 구글)
-* [ ] Refresh Token 구현
-* [ ] 게시글 CRUD 기능 추가
-
----
-
-## 💡 느낀 점
-
-Spring Security와 JWT를 활용한 인증 구조를 직접 구현하면서
-**Stateless 인증 방식과 필터 기반 인증 흐름**을 이해할 수 있었습니다.

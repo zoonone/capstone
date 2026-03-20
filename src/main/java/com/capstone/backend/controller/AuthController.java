@@ -1,14 +1,15 @@
 package com.capstone.backend.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import com.capstone.backend.dto.LoginRequest;
 import com.capstone.backend.dto.SignupRequest;
+import com.capstone.backend.dto.TokenResponse;
+import jakarta.validation.Valid;
 import com.capstone.backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,24 +20,27 @@ public class AuthController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupRequest request) {
+    public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest request) {
         authService.signup(request);
-        return ResponseEntity.ok("회원가입 성공");
-    }
-    @PostMapping("/test")
-    public String test() {
-        return "test ok";
+        return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 성공");
     }
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(new TokenResponse(authService.login(request)));
     }
 
     @GetMapping("/me")
-    public String me() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    public String me(Authentication auth) {
+        if (auth == null) {
+            return "";
+        }
         return auth.getName();
+    }
+
+    @GetMapping("/oauth2/url/{provider}")
+    public ResponseEntity<String> getOauth2AuthorizationUrl(@PathVariable String provider) {
+        return ResponseEntity.ok("/oauth2/authorization/" + provider);
     }
 }
