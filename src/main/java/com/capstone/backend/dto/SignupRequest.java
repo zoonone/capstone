@@ -8,12 +8,14 @@ import lombok.Getter;
 @Getter
 public class SignupRequest {
 
-    @NotBlank(message = "이메일은 필수입니다.")
-    @Email(message = "올바른 이메일 형식이 아닙니다.")
+    private static final String INVALID_CREDENTIALS_MESSAGE = "이메일 혹은 비밀번호가 잘못되었습니다.";
+
+    @NotBlank(message = INVALID_CREDENTIALS_MESSAGE)
+    @Email(message = INVALID_CREDENTIALS_MESSAGE)
     private String email;
 
-    @NotBlank(message = "비밀번호는 필수입니다.")
-    @Size(min = 4, message = "비밀번호는 4자 이상이어야 합니다.")
+    @NotBlank(message = INVALID_CREDENTIALS_MESSAGE)
+    @Size(min = 4, message = INVALID_CREDENTIALS_MESSAGE)
     private String password;
 
     @NotBlank(message = "이름은 필수입니다.")

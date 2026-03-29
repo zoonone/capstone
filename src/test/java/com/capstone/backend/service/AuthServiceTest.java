@@ -4,6 +4,7 @@ import com.capstone.backend.dto.LoginRequest;
 import com.capstone.backend.dto.SignupRequest;
 import com.capstone.backend.entity.AuthProvider;
 import com.capstone.backend.entity.User;
+import com.capstone.backend.global.exception.ConflictException;
 import com.capstone.backend.global.exception.UnauthorizedException;
 import com.capstone.backend.global.jwt.JwtUtil;
 import com.capstone.backend.repository.UserRepository;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
@@ -25,13 +25,13 @@ import static org.mockito.Mockito.when;
 class AuthServiceTest {
 
     private static final String TEST_JWT_SECRET = "4f9a2c7e1b6d8a0c3e5f7b9d2a4c6e8f";
-    private static final String LOGIN_FAILURE_MESSAGE = "아이디 또는 비밀번호가 잘못되었습니다.";
+    private static final String LOGIN_FAILURE_MESSAGE = "이메일 혹은 비밀번호가 잘못되었습니다.";
 
     @Mock
     private UserRepository userRepository;
 
     private final JwtUtil jwtUtil = new JwtUtil(TEST_JWT_SECRET, 3600000);
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Test
     void loginReturnsJwtForLocalUser() {
@@ -122,5 +122,20 @@ class AuthServiceTest {
 
         assertEquals(AuthProvider.LOCAL, saved.getProvider());
         assertTrue(passwordEncoder.matches("pw1234", saved.getPassword()));
+    }
+
+    @Test
+    void signupRejectsDuplicateEmailWithGenericMessage() {
+        AuthService authService = new AuthService(userRepository, jwtUtil, passwordEncoder);
+        SignupRequest request = new SignupRequest();
+        ReflectionTestUtils.setField(request, "email", "existing@example.com");
+        ReflectionTestUtils.setField(request, "password", "pw1234");
+        ReflectionTestUtils.setField(request, "name", "Existing User");
+
+        when(userRepository.findByEmail("existing@example.com"))
+                .thenReturn(Optional.of(User.builder().email("existing@example.com").build()));
+
+        ConflictException exception = assertThrows(ConflictException.class, () -> authService.signup(request));
+        assertEquals(LOGIN_FAILURE_MESSAGE, exception.getMessage());
     }
 }

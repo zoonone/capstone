@@ -88,7 +88,7 @@ class AuthControllerApiTest {
 
     @Test
     void signupReturnsConflictForDuplicateEmail() throws Exception {
-        when(authService.signup(any(SignupRequest.class))).thenThrow(new ConflictException("이미 존재하는 이메일입니다."));
+        when(authService.signup(any(SignupRequest.class))).thenThrow(new ConflictException("이메일 혹은 비밀번호가 잘못되었습니다."));
 
         mockMvc.perform(post("/api/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -102,12 +102,12 @@ class AuthControllerApiTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status").value(409))
                 .andExpect(jsonPath("$.error").value("Conflict"))
-                .andExpect(jsonPath("$.message").value("이미 존재하는 이메일입니다."));
+                .andExpect(jsonPath("$.message").value("이메일 혹은 비밀번호가 잘못되었습니다."));
     }
 
     @Test
     void loginReturnsUnauthorizedForInvalidCredentials() throws Exception {
-        when(authService.login(any())).thenThrow(new UnauthorizedException("아이디 또는 비밀번호가 잘못되었습니다."));
+        when(authService.login(any())).thenThrow(new UnauthorizedException("이메일 혹은 비밀번호가 잘못되었습니다."));
 
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -120,7 +120,7 @@ class AuthControllerApiTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401))
                 .andExpect(jsonPath("$.error").value("Unauthorized"))
-                .andExpect(jsonPath("$.message").value("아이디 또는 비밀번호가 잘못되었습니다."));
+                .andExpect(jsonPath("$.message").value("이메일 혹은 비밀번호가 잘못되었습니다."));
     }
 
     @Test
@@ -136,7 +136,7 @@ class AuthControllerApiTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.error").value("Bad Request"))
-                .andExpect(jsonPath("$.message").isNotEmpty());
+                .andExpect(jsonPath("$.message").value("이메일 혹은 비밀번호가 잘못되었습니다."));
     }
 
     @Test
@@ -168,6 +168,6 @@ class AuthControllerApiTest {
                                 }
                                 """))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").isNotEmpty());
+                .andExpect(jsonPath("$.message").value("이메일 혹은 비밀번호가 잘못되었습니다."));
     }
 }

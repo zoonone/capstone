@@ -9,24 +9,24 @@ import com.capstone.backend.global.exception.UnauthorizedException;
 import com.capstone.backend.global.jwt.JwtUtil;
 import com.capstone.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private static final String LOGIN_FAILURE_MESSAGE = "아이디 또는 비밀번호가 잘못되었습니다.";
+    private static final String CREDENTIALS_FAILURE_MESSAGE = "이메일 혹은 비밀번호가 잘못되었습니다.";
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     // 회원가입
     public User signup(SignupRequest request) {
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new ConflictException("이미 존재하는 이메일입니다.");
+            throw new ConflictException(CREDENTIALS_FAILURE_MESSAGE);
         }
 
         User user = User.builder()
@@ -41,14 +41,14 @@ public class AuthService {
     // 로그인
     public String login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UnauthorizedException(LOGIN_FAILURE_MESSAGE));
+                .orElseThrow(() -> new UnauthorizedException(CREDENTIALS_FAILURE_MESSAGE));
 
         if (user.getProvider() != AuthProvider.LOCAL || user.getPassword() == null) {
-            throw new UnauthorizedException(LOGIN_FAILURE_MESSAGE);
+            throw new UnauthorizedException(CREDENTIALS_FAILURE_MESSAGE);
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new UnauthorizedException(LOGIN_FAILURE_MESSAGE);
+            throw new UnauthorizedException(CREDENTIALS_FAILURE_MESSAGE);
         }
 
         return jwtUtil.createToken(user.getEmail()); // ⭐ 토큰 반환
