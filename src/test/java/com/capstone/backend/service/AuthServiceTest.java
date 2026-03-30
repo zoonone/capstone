@@ -51,6 +51,7 @@ class AuthServiceTest {
 
         String token = authService.login(request);
 
+        assertTrue(jwtUtil.validateToken(token));
         assertEquals("user@example.com", jwtUtil.getEmail(token));
     }
 
@@ -120,7 +121,10 @@ class AuthServiceTest {
 
         User saved = authService.signup(request);
 
+        assertEquals("new@example.com", saved.getEmail());
+        assertEquals("New User", saved.getName());
         assertEquals(AuthProvider.LOCAL, saved.getProvider());
+        assertNotEquals("pw1234", saved.getPassword());
         assertTrue(passwordEncoder.matches("pw1234", saved.getPassword()));
     }
 

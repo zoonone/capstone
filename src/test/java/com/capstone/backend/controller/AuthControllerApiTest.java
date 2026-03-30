@@ -49,7 +49,6 @@ class AuthControllerApiTest {
 
     @MockBean
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-
     @Test
     void signupReturnsCreated() throws Exception {
         when(authService.signup(any(SignupRequest.class))).thenReturn(User.builder().build());
@@ -160,7 +159,7 @@ class AuthControllerApiTest {
     void signupReturnsBadRequestForInvalidPayload() throws Exception {
         mockMvc.perform(post("/api/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
+                .content("""
                                 {
                                   "email": "",
                                   "password": "123",

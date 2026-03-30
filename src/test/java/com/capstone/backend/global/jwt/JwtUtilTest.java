@@ -12,9 +12,20 @@ class JwtUtilTest {
 
     @Test
     void createTokenProducesValidTokenWithEmailSubject() {
-        String token = jwtUtil.createToken("user@example.com");
+        String email = "user@example.com";
 
+        String token = jwtUtil.createToken(email);
+
+        assertNotNull(token);
         assertTrue(jwtUtil.validateToken(token));
-        assertEquals("user@example.com", jwtUtil.getEmail(token));
+        assertEquals(email, jwtUtil.getEmail(token));
+    }
+
+    @Test
+    void validateTokenReturnsFalseForTamperedToken() {
+        String token = jwtUtil.createToken("user@example.com");
+        String tamperedToken = token.substring(0, token.length() - 1) + "x";
+
+        assertFalse(jwtUtil.validateToken(tamperedToken));
     }
 }
