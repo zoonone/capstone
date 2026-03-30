@@ -2,29 +2,36 @@ package com.capstone.backend.service;
 
 import com.capstone.backend.dto.LoginRequest;
 import com.capstone.backend.dto.SignupRequest;
+import com.capstone.backend.entity.AuthProvider;
 import com.capstone.backend.entity.User;
+import com.capstone.backend.global.exception.ConflictException;
+import com.capstone.backend.global.exception.UnauthorizedException;
 import com.capstone.backend.global.jwt.JwtUtil;
 import com.capstone.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
+    private static final String CREDENTIALS_FAILURE_MESSAGE = "이메일 혹은 비밀번호가 잘못되었습니다.";
+
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     // 회원가입
     public User signup(SignupRequest request) {
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("이미 존재하는 이메일입니다.");
+            throw new ConflictException(CREDENTIALS_FAILURE_MESSAGE);
         }
 
         User user = User.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
                 .build();
 
@@ -34,10 +41,14 @@ public class AuthService {
     // 로그인
     public String login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("유저 없음"));
+                .orElseThrow(() -> new UnauthorizedException(CREDENTIALS_FAILURE_MESSAGE));
 
-        if (!user.getPassword().equals(request.getPassword())) {
-            throw new RuntimeException("비밀번호 틀림");
+        if (user.getProvider() != AuthProvider.LOCAL || user.getPassword() == null) {
+            throw new UnauthorizedException(CREDENTIALS_FAILURE_MESSAGE);
+        }
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new UnauthorizedException(CREDENTIALS_FAILURE_MESSAGE);
         }
 
         return jwtUtil.createToken(user.getEmail()); // ⭐ 토큰 반환

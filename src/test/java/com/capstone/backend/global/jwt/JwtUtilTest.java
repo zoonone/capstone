@@ -1,0 +1,20 @@
+package com.capstone.backend.global.jwt;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class JwtUtilTest {
+
+    private static final String TEST_JWT_SECRET = "4f9a2c7e1b6d8a0c3e5f7b9d2a4c6e8f";
+
+    private final JwtUtil jwtUtil = new JwtUtil(TEST_JWT_SECRET, 3600000);
+
+    @Test
+    void createTokenProducesValidTokenWithEmailSubject() {
+        String token = jwtUtil.createToken("user@example.com");
+
+        assertTrue(jwtUtil.validateToken(token));
+        assertEquals("user@example.com", jwtUtil.getEmail(token));
+    }
+}

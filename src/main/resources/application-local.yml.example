@@ -1,0 +1,21 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: your-google-client-id
+            client-secret: your-google-client-secret
+          kakao:
+            client-id: your-kakao-client-id
+            client-secret: your-kakao-client-secret
+          naver:
+            client-id: your-naver-client-id
+            client-secret: your-naver-client-secret
+
+jwt:
+  secret: replace-with-a-random-32-byte-secret-like-4f9a2c7e1b6d8a0c3e5f7b9d2a4c6e8f
+
+app:
+  oauth2:
+    redirect-uri: http://localhost:3000/oauth/callback

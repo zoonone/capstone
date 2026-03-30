@@ -22,4 +22,22 @@ public class User {
 
     private String name;
 
+    @Column(name = "baekjoon_id", length = 50)
+    private String baekjoonId;
+
+    @Column(name = "experience_level", nullable = false, length = 20)
+    @Builder.Default
+    private String experienceLevel = "BEGINNER";
+
+    @Column(name = "github_url")
+    private String githubUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private AuthProvider provider = AuthProvider.LOCAL;
+
+    @Column(unique = true)
+    private String providerId;
+
 }
