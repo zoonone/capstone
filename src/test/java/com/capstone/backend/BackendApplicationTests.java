@@ -2,6 +2,7 @@ package com.capstone.backend;
 
 import com.capstone.backend.global.jwt.JwtFilter;
 import com.capstone.backend.global.jwt.JwtUtil;
+import com.capstone.backend.security.CorsProperties;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ class BackendApplicationTests {
     @Autowired
     private CorsConfigurationSource corsConfigurationSource;
 
+    @Autowired
+    private CorsProperties corsProperties;
+
     @Test
     @DisplayName("애플리케이션 핵심 보안 빈이 정상적으로 로드된다")
     void contextLoadsCoreSecurityBeans() {
@@ -42,6 +46,7 @@ class BackendApplicationTests {
         assertNotNull(passwordEncoder);
         assertNotNull(securityFilterChain);
         assertNotNull(corsConfigurationSource);
+        assertNotNull(corsProperties);
     }
 
     @Test
@@ -70,6 +75,7 @@ class BackendApplicationTests {
         CorsConfiguration configuration = corsConfigurationSource.getCorsConfiguration(request);
 
         assertNotNull(configuration);
+        assertEquals(corsProperties.getAllowedOrigins(), configuration.getAllowedOrigins());
         assertTrue(configuration.getAllowedOrigins().contains("http://localhost:3000"));
         assertTrue(configuration.getAllowedOrigins().contains("http://127.0.0.1:5173"));
         assertTrue(configuration.getAllowedMethods().contains("POST"));

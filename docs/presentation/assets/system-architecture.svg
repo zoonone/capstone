@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .title { font: 700 42px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .label { font: 700 24px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .body { font: 500 20px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #334e68; }
+      .small { font: 500 18px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #486581; }
+      .box { rx: 24; ry: 24; stroke-width: 3; }
+      .line { stroke: #486581; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#486581"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#f8fbff"/>
+  <text x="80" y="90" class="title">백엔드 인증 서버 아키텍처</text>
+
+  <rect x="90" y="180" width="250" height="110" fill="#d9e2ec" stroke="#9fb3c8" class="box"/>
+  <text x="145" y="235" class="label">클라이언트</text>
+  <text x="115" y="270" class="body">웹 프론트 / 테스트 요청</text>
+
+  <rect x="420" y="140" width="260" height="90" fill="#e3f2fd" stroke="#3e7cb1" class="box"/>
+  <text x="475" y="195" class="label">AuthController</text>
+
+  <rect x="420" y="270" width="260" height="90" fill="#e8f5e9" stroke="#4c956c" class="box"/>
+  <text x="505" y="325" class="label">AuthService</text>
+
+  <rect x="420" y="400" width="260" height="90" fill="#fff4e5" stroke="#d9822b" class="box"/>
+  <text x="485" y="455" class="label">UserRepository</text>
+
+  <rect x="770" y="130" width="300" height="110" fill="#f3e8ff" stroke="#8b5cf6" class="box"/>
+  <text x="830" y="185" class="label">SecurityConfig</text>
+  <text x="800" y="215" class="small">인가 정책 / 필터 체인 / CORS</text>
+
+  <rect x="770" y="290" width="300" height="110" fill="#e0f2fe" stroke="#0284c7" class="box"/>
+  <text x="865" y="345" class="label">JwtFilter</text>
+  <text x="807" y="375" class="small">Bearer 토큰 검증 후 인증 객체 주입</text>
+
+  <rect x="770" y="450" width="300" height="110" fill="#fee2e2" stroke="#dc2626" class="box"/>
+  <text x="855" y="505" class="label">JwtUtil</text>
+  <text x="825" y="535" class="small">JWT 생성 / 파싱 / 검증</text>
+
+  <rect x="1150" y="140" width="320" height="120" fill="#eef2ff" stroke="#6366f1" class="box"/>
+  <text x="1190" y="195" class="label">OAuth2UserService</text>
+  <text x="1182" y="225" class="small">Google / Kakao / Naver 사용자 매핑</text>
+
+  <rect x="1150" y="320" width="320" height="120" fill="#ecfccb" stroke="#65a30d" class="box"/>
+  <text x="1176" y="375" class="label">OAuth2SuccessHandler</text>
+  <text x="1178" y="405" class="small">JWT 발급 후 프론트로 리다이렉트</text>
+
+  <rect x="1150" y="500" width="320" height="120" fill="#fef3c7" stroke="#d97706" class="box"/>
+  <text x="1220" y="555" class="label">MySQL</text>
+  <text x="1180" y="585" class="small">User 엔티티 저장 / 조회</text>
+
+  <path d="M340 235 L420 185" class="line"/>
+  <path d="M550 230 L550 270" class="line"/>
+  <path d="M550 360 L550 400" class="line"/>
+  <path d="M680 185 L770 185" class="line"/>
+  <path d="M680 315 L770 345" class="line"/>
+  <path d="M680 445 L770 505" class="line"/>
+  <path d="M1070 185 L1150 200" class="line"/>
+  <path d="M1070 345 L1150 380" class="line"/>
+  <path d="M680 445 L1150 560" class="line"/>
+
+  <text x="90" y="760" class="label">설계 포인트</text>
+  <text x="90" y="805" class="body">1. 컨트롤러는 요청/응답만 담당하고, 비즈니스 로직은 서비스로 분리했습니다.</text>
+  <text x="90" y="840" class="body">2. JWT와 OAuth2를 Spring Security 체인에 통합해 인증 흐름을 한 곳에서 관리합니다.</text>
+</svg>

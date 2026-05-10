@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .title { font: 700 42px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .label { font: 700 26px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .body { font: 500 20px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #334e68; }
+      .code { font: 22px Menlo, Monaco, monospace; fill: #e6f1ff; }
+      .small { font: 500 18px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #486581; }
+      .box { rx: 22; ry: 22; stroke-width: 3; }
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#f8fbff"/>
+  <text x="80" y="90" class="title">패키지 구조</text>
+
+  <rect x="80" y="150" width="820" height="620" fill="#0f172a" stroke="#1e293b" class="box"/>
+  <text x="120" y="210" class="code">src/main/java/com/capstone/backend</text>
+  <text x="120" y="255" class="code">├── controller</text>
+  <text x="160" y="295" class="code">├── AuthController.java</text>
+  <text x="160" y="335" class="code">└── HomeController.java</text>
+  <text x="120" y="385" class="code">├── service</text>
+  <text x="160" y="425" class="code">└── AuthService.java</text>
+  <text x="120" y="475" class="code">├── repository</text>
+  <text x="160" y="515" class="code">└── UserRepository.java</text>
+  <text x="120" y="565" class="code">├── security / oauth</text>
+  <text x="160" y="605" class="code">├── SecurityConfig.java</text>
+  <text x="160" y="645" class="code">├── CustomOAuth2UserService.java</text>
+  <text x="160" y="685" class="code">└── OAuth2AuthenticationSuccessHandler.java</text>
+  <text x="120" y="735" class="code">└── global / jwt / exception</text>
+
+  <rect x="980" y="190" width="470" height="120" fill="#e3f2fd" stroke="#3e7cb1" class="box"/>
+  <text x="1015" y="245" class="label">Controller</text>
+  <text x="1015" y="280" class="body">HTTP 요청을 받고 응답 형식을 결정</text>
+
+  <rect x="980" y="340" width="470" height="120" fill="#e8f5e9" stroke="#4c956c" class="box"/>
+  <text x="1015" y="395" class="label">Service</text>
+  <text x="1015" y="430" class="body">회원가입, 로그인 같은 핵심 비즈니스 처리</text>
+
+  <rect x="980" y="490" width="470" height="120" fill="#fff4e5" stroke="#d9822b" class="box"/>
+  <text x="1015" y="545" class="label">Security / Global</text>
+  <text x="1015" y="580" class="body">JWT, OAuth2, 예외 처리 등 공통 보안 로직 담당</text>
+
+  <text x="980" y="700" class="small">패키지를 이렇게 나눈 이유는 변경 지점을 분리해 유지보수성과 테스트 작성성을 높이기 위해서입니다.</text>
+</svg>

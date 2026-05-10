@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .title { font: 700 42px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .label { font: 700 26px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .body { font: 500 20px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #334e68; }
+      .box { rx: 22; ry: 22; stroke-width: 3; }
+      .line { stroke: #486581; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#486581"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#f8fbff"/>
+  <text x="80" y="90" class="title">로컬 로그인 처리 흐름</text>
+
+  <rect x="90" y="260" width="220" height="110" fill="#d9e2ec" stroke="#9fb3c8" class="box"/>
+  <text x="155" y="325" class="label">Client</text>
+
+  <rect x="390" y="260" width="240" height="110" fill="#e3f2fd" stroke="#3e7cb1" class="box"/>
+  <text x="430" y="325" class="label">AuthController</text>
+
+  <rect x="710" y="180" width="250" height="110" fill="#e8f5e9" stroke="#4c956c" class="box"/>
+  <text x="775" y="245" class="label">AuthService</text>
+
+  <rect x="710" y="360" width="250" height="110" fill="#fff4e5" stroke="#d9822b" class="box"/>
+  <text x="738" y="425" class="label">UserRepository</text>
+
+  <rect x="1040" y="180" width="250" height="110" fill="#e0f2fe" stroke="#0284c7" class="box"/>
+  <text x="1115" y="245" class="label">BCrypt</text>
+
+  <rect x="1040" y="360" width="250" height="110" fill="#fee2e2" stroke="#dc2626" class="box"/>
+  <text x="1115" y="425" class="label">JwtUtil</text>
+
+  <rect x="1370" y="260" width="150" height="110" fill="#eef2ff" stroke="#6366f1" class="box"/>
+  <text x="1405" y="325" class="label">JWT</text>
+
+  <path d="M310 315 L390 315" class="line"/>
+  <path d="M630 315 L710 235" class="line"/>
+  <path d="M835 290 L835 360" class="line"/>
+  <path d="M960 235 L1040 235" class="line"/>
+  <path d="M960 415 L1040 415" class="line"/>
+  <path d="M1290 415 L1370 315" class="line"/>
+
+  <text x="360" y="275" class="body">`POST /api/auth/login`</text>
+  <text x="675" y="145" class="body">1. 이메일로 사용자 조회</text>
+  <text x="680" y="525" class="body">2. 로컬 계정인지 확인</text>
+  <text x="1030" y="145" class="body">3. 비밀번호 해시 비교</text>
+  <text x="1015" y="525" class="body">4. 성공 시 토큰 생성</text>
+  <text x="1330" y="235" class="body">5. accessToken 응답</text>
+
+  <text x="90" y="700" class="label">왜 이렇게 만들었나?</text>
+  <text x="90" y="745" class="body">비밀번호는 평문 저장을 피하기 위해 BCrypt로 비교하고, 인증 성공 후에는 세션 대신 JWT를 발급해 API 호출이 단순해집니다.</text>
+  <text x="90" y="785" class="body">또한 OAuth 계정이 실수로 일반 비밀번호 로그인을 통과하지 않도록 provider 검사를 추가했습니다.</text>
+</svg>

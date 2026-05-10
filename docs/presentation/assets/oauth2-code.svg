@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .title { font: 700 38px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .code { font: 21px Menlo, Monaco, monospace; fill: #e2e8f0; }
+      .num { font: 21px Menlo, Monaco, monospace; fill: #64748b; }
+      .hl { fill: #38bdf8; font-weight: 700; }
+      .st { fill: #86efac; }
+      .cm { fill: #fbbf24; }
+      .box { rx: 24; ry: 24; }
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#f8fbff"/>
+  <text x="80" y="85" class="title">실제 동작 코드: OAuth2 사용자 처리</text>
+  <rect x="80" y="130" width="1440" height="690" fill="#0f172a" class="box"/>
+  <text x="120" y="190" class="num">1</text><text x="170" y="190" class="code"><tspan>OAuth2User oauth2User = delegate.loadUser(userRequest);</tspan></text>
+  <text x="120" y="235" class="num">2</text><text x="170" y="235" class="code"><tspan>String registrationId = userRequest.getClientRegistration().getRegistrationId();</tspan></text>
+  <text x="120" y="280" class="num">3</text><text x="170" y="280" class="code"><tspan>OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(</tspan></text>
+  <text x="120" y="325" class="num">4</text><text x="170" y="325" class="code"><tspan>    registrationId, oauth2User.getAttributes());</tspan></text>
+  <text x="120" y="370" class="num">5</text><text x="170" y="370" class="code"><tspan class="hl">return</tspan><tspan> upsertOAuth2User(registrationId, userInfo, oauth2User.getAttributes());</tspan></text>
+  <text x="120" y="450" class="num">6</text><text x="170" y="450" class="code"><tspan>if (</tspan><tspan class="st">"google"</tspan><tspan>.equalsIgnoreCase(registrationId)) {</tspan></text>
+  <text x="120" y="495" class="num">7</text><text x="170" y="495" class="code"><tspan>    </tspan><tspan class="hl">return</tspan><tspan> </tspan><tspan class="hl">new</tspan><tspan> GoogleOAuth2UserInfo(attributes);</tspan></text>
+  <text x="120" y="540" class="num">8</text><text x="170" y="540" class="code"><tspan>}</tspan></text>
+  <text x="120" y="585" class="num">9</text><text x="170" y="585" class="code"><tspan>if (</tspan><tspan class="st">"kakao"</tspan><tspan>.equalsIgnoreCase(registrationId)) { ... }</tspan></text>
+  <text x="120" y="630" class="num">10</text><text x="170" y="630" class="code"><tspan>if (</tspan><tspan class="st">"naver"</tspan><tspan>.equalsIgnoreCase(registrationId)) { ... }</tspan></text>
+  <text x="120" y="720" class="num">11</text><text x="170" y="720" class="code"><tspan class="cm">// provider별 JSON 구조 차이를 팩토리로 흡수</tspan></text>
+</svg>

@@ -8,6 +8,7 @@ import com.capstone.backend.global.exception.UnauthorizedException;
 import com.capstone.backend.global.jwt.JwtFilter;
 import com.capstone.backend.global.jwt.JwtUtil;
 import com.capstone.backend.security.SecurityConfig;
+import com.capstone.backend.security.oauth.OAuth2AuthenticationFailureHandler;
 import com.capstone.backend.security.oauth.CustomOAuth2UserService;
 import com.capstone.backend.security.oauth.OAuth2AuthenticationSuccessHandler;
 import com.capstone.backend.service.AuthService;
@@ -49,6 +50,10 @@ class AuthControllerApiTest {
 
     @MockBean
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+    @MockBean
+    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+
     @Test
     void signupReturnsCreated() throws Exception {
         when(authService.signup(any(SignupRequest.class))).thenReturn(User.builder().build());
@@ -168,5 +173,19 @@ class AuthControllerApiTest {
                                 """))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("이메일 혹은 비밀번호가 잘못되었습니다."));
+    }
+
+    @Test
+    void oauth2UrlReturnsAuthorizationPathForSupportedProvider() throws Exception {
+        mockMvc.perform(get("/api/auth/oauth2/url/google"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("/oauth2/authorization/google"));
+    }
+
+    @Test
+    void oauth2UrlReturnsBadRequestForUnsupportedProvider() throws Exception {
+        mockMvc.perform(get("/api/auth/oauth2/url/kakao"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("지원하지 않는 OAuth provider입니다."));
     }
 }

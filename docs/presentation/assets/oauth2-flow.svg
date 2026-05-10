@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .title { font: 700 42px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .label { font: 700 24px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .body { font: 500 20px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #334e68; }
+      .box { rx: 22; ry: 22; stroke-width: 3; }
+      .line { stroke: #486581; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#486581"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#f8fbff"/>
+  <text x="80" y="90" class="title">OAuth2 로그인 처리 흐름</text>
+
+  <rect x="80" y="260" width="200" height="120" fill="#d9e2ec" stroke="#9fb3c8" class="box"/>
+  <text x="135" y="330" class="label">Frontend</text>
+
+  <rect x="350" y="260" width="220" height="120" fill="#eef2ff" stroke="#6366f1" class="box"/>
+  <text x="405" y="330" class="label">Spring Security</text>
+
+  <rect x="640" y="120" width="280" height="120" fill="#f3e8ff" stroke="#8b5cf6" class="box"/>
+  <text x="675" y="190" class="label">OAuth2 Provider</text>
+  <text x="710" y="220" class="body">Google / Kakao / Naver</text>
+
+  <rect x="640" y="320" width="280" height="120" fill="#e8f5e9" stroke="#4c956c" class="box"/>
+  <text x="675" y="390" class="label">CustomOAuth2UserService</text>
+
+  <rect x="1010" y="220" width="250" height="120" fill="#fff4e5" stroke="#d9822b" class="box"/>
+  <text x="1060" y="290" class="label">UserRepository</text>
+
+  <rect x="1330" y="220" width="220" height="120" fill="#fee2e2" stroke="#dc2626" class="box"/>
+  <text x="1375" y="290" class="label">SuccessHandler</text>
+
+  <path d="M280 320 L350 320" class="line"/>
+  <path d="M570 300 L640 200" class="line"/>
+  <path d="M780 240 L780 320" class="line"/>
+  <path d="M920 380 L1010 280" class="line"/>
+  <path d="M1260 280 L1330 280" class="line"/>
+  <path d="M1440 340 L1440 470 L180 470 L180 380" class="line"/>
+
+  <text x="90" y="180" class="body">1. 프론트가 `/oauth2/authorization/{provider}` 진입</text>
+  <text x="610" y="500" class="body">2. 제공자 사용자 정보 수신 후 provider별로 공통 인터페이스로 변환</text>
+  <text x="610" y="540" class="body">3. 기존 회원이면 갱신, 없으면 생성(upsert)</text>
+  <text x="610" y="580" class="body">4. 로그인 성공 시 JWT 발급 후 프론트 콜백 URL로 리다이렉트</text>
+
+  <text x="90" y="700" class="label">설계 이유</text>
+  <text x="90" y="745" class="body">OAuth2 제공자마다 응답 필드가 다르기 때문에 `OAuth2UserInfo` 계층으로 추상화했습니다.</text>
+  <text x="90" y="785" class="body">이 구조 덕분에 새로운 소셜 로그인을 추가할 때도 매핑 클래스만 늘리면 됩니다.</text>
+</svg>

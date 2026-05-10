@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .title { font: 700 38px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .code { font: 22px Menlo, Monaco, monospace; fill: #e2e8f0; }
+      .num { font: 22px Menlo, Monaco, monospace; fill: #64748b; }
+      .hl { fill: #38bdf8; font-weight: 700; }
+      .st { fill: #86efac; }
+      .cm { fill: #fbbf24; }
+      .box { rx: 24; ry: 24; }
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#f8fbff"/>
+  <text x="80" y="85" class="title">실제 동작 코드: JwtFilter</text>
+  <rect x="80" y="130" width="1440" height="690" fill="#0f172a" class="box"/>
+  <text x="120" y="190" class="num">1</text><text x="170" y="190" class="code"><tspan>String authHeader = request.getHeader(</tspan><tspan class="st">"Authorization"</tspan><tspan>);</tspan></text>
+  <text x="120" y="235" class="num">2</text><text x="170" y="235" class="code"><tspan class="hl">if</tspan><tspan> (authHeader != </tspan><tspan class="hl">null</tspan><tspan> &amp;&amp; authHeader.startsWith(</tspan><tspan class="st">"Bearer "</tspan><tspan>)) {</tspan></text>
+  <text x="120" y="280" class="num">3</text><text x="170" y="280" class="code"><tspan>    String token = authHeader.substring(7);</tspan></text>
+  <text x="120" y="325" class="num">4</text><text x="170" y="325" class="code"><tspan>    </tspan><tspan class="hl">if</tspan><tspan> (jwtUtil.validateToken(token)) {</tspan></text>
+  <text x="120" y="370" class="num">5</text><text x="170" y="370" class="code"><tspan>        String email = jwtUtil.getEmail(token);</tspan></text>
+  <text x="120" y="415" class="num">6</text><text x="170" y="415" class="code"><tspan>        UsernamePasswordAuthenticationToken authentication =</tspan></text>
+  <text x="120" y="460" class="num">7</text><text x="170" y="460" class="code"><tspan>            </tspan><tspan class="hl">new</tspan><tspan> UsernamePasswordAuthenticationToken(email, </tspan><tspan class="hl">null</tspan><tspan>, ...);</tspan></text>
+  <text x="120" y="505" class="num">8</text><text x="170" y="505" class="code"><tspan>        SecurityContextHolder.getContext().setAuthentication(authentication);</tspan></text>
+  <text x="120" y="550" class="num">9</text><text x="170" y="550" class="code"><tspan>        request.setAttribute(</tspan><tspan class="st">"email"</tspan><tspan>, email);</tspan></text>
+  <text x="120" y="595" class="num">10</text><text x="170" y="595" class="code"><tspan>    }</tspan></text>
+  <text x="120" y="640" class="num">11</text><text x="170" y="640" class="code"><tspan>}</tspan></text>
+  <text x="120" y="730" class="num">12</text><text x="170" y="730" class="code"><tspan class="cm">// JWT가 유효하면 인증 객체를 SecurityContext에 저장</tspan></text>
+</svg>

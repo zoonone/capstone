@@ -5,6 +5,7 @@ import com.capstone.backend.global.jwt.JwtFilter;
 import com.capstone.backend.global.jwt.JwtUtil;
 import com.capstone.backend.security.SecurityConfig;
 import com.capstone.backend.security.oauth.CustomOAuth2UserService;
+import com.capstone.backend.security.oauth.OAuth2AuthenticationFailureHandler;
 import com.capstone.backend.security.oauth.OAuth2AuthenticationSuccessHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ class HomeControllerApiTest {
 
     @MockBean
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+    @MockBean
+    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Test
     void rootReturnsOkWithoutAuthentication() throws Exception {

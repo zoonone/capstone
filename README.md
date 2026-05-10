@@ -34,6 +34,7 @@ Spring Boot 3 기반 인증 서버입니다. 로컬 회원가입/로그인, JWT 
 - JPA DDL 정책: `update`
 - JWT 만료 시간 기본값: `3600000ms`
 - 프론트 OAuth 콜백 기본값: `http://localhost:3000/oauth/callback`
+- 기본 CORS 허용 Origin: `http://localhost:3000`, `http://127.0.0.1:3000`, `http://localhost:5173`, `http://127.0.0.1:5173`
 
 ## 환경 변수
 
@@ -51,6 +52,12 @@ Spring Boot 3 기반 인증 서버입니다. 로컬 회원가입/로그인, JWT 
 - `NAVER_CLIENT_ID`
 - `NAVER_CLIENT_SECRET`
 - `OAUTH2_REDIRECT_URI`
+- `CORS_ALLOWED_ORIGINS`
+- `CORS_ALLOWED_METHODS`
+- `CORS_ALLOWED_HEADERS`
+- `CORS_EXPOSED_HEADERS`
+- `CORS_ALLOW_CREDENTIALS`
+- `CORS_MAX_AGE`
 
 `JWT_SECRET`은 반드시 설정해야 하며 충분히 긴 랜덤 문자열을 사용하는 것이 안전합니다.
 

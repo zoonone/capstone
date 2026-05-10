@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .title { font: 700 42px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .label { font: 700 26px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #102a43; }
+      .body { font: 500 20px 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; fill: #334e68; }
+      .box { rx: 22; ry: 22; stroke-width: 3; }
+      .line { stroke: #486581; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#486581"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#f8fbff"/>
+  <text x="80" y="90" class="title">예외 처리와 테스트 전략</text>
+
+  <rect x="90" y="190" width="520" height="380" fill="#fff4e5" stroke="#d9822b" class="box"/>
+  <text x="130" y="255" class="label">GlobalExceptionHandler</text>
+  <text x="130" y="310" class="body">입력 검증 실패, 비즈니스 예외, 서버 예외를 한곳에서 처리</text>
+  <text x="130" y="350" class="body">응답 형식: status / error / message</text>
+  <text x="130" y="390" class="body">인증 API의 email/password 오류는 메시지를 통일</text>
+  <text x="130" y="430" class="body">보안상 어떤 값이 틀렸는지 자세히 노출하지 않음</text>
+
+  <rect x="760" y="190" width="720" height="380" fill="#e8f5e9" stroke="#4c956c" class="box"/>
+  <text x="800" y="255" class="label">테스트 구성</text>
+  <text x="800" y="310" class="body">1. AuthServiceTest: 로그인 성공/실패, 중복 회원가입, 비밀번호 해시 검증</text>
+  <text x="800" y="360" class="body">2. AuthControllerApiTest: HTTP 상태 코드, JSON 응답, 인증 없는 `/me` 동작 검증</text>
+  <text x="800" y="410" class="body">3. JwtUtilTest / JwtFilterTest: 토큰 생성, 파싱, 필터 인증 주입 확인</text>
+  <text x="800" y="460" class="body">4. OAuth 관련 테스트: provider별 사용자 정보 매핑 안정성 확보</text>
+
+  <path d="M610 380 L760 380" class="line"/>
+  <text x="645" y="350" class="body">예외 응답을 테스트로 고정</text>
+
+  <text x="90" y="690" class="label">발표 포인트</text>
+  <text x="90" y="735" class="body">"기능만 구현한 것이 아니라 실패 상황도 같은 수준으로 설계했다"는 점을 강조하면 발표가 안정적으로 보입니다.</text>
+  <text x="90" y="775" class="body">특히 로그인 실패 메시지를 통일한 이유를 보안 관점에서 설명하면 설계 의도가 분명해집니다.</text>
+</svg>

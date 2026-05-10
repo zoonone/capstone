@@ -2,18 +2,21 @@ package com.capstone.backend.security.oauth;
 
 import com.capstone.backend.entity.AuthProvider;
 import com.capstone.backend.entity.User;
+import com.capstone.backend.global.exception.ConflictException;
 import com.capstone.backend.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -74,5 +77,30 @@ class CustomOAuth2UserServiceTest {
         OAuth2User user = customOAuth2UserService.upsertOAuth2User("naver", userInfo, Map.of("response", Map.of("id", "naver-123")));
 
         assertEquals("naver@example.com", user.getName());
+    }
+
+    @Test
+    void rejectsOAuthLoginWhenLocalAccountAlreadyExists() {
+        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo("google",
+                Map.of("sub", "google-123", "email", "user@example.com", "name", "Google User"));
+
+        when(userRepository.findByProviderAndProviderId(AuthProvider.GOOGLE, "google-123")).thenReturn(Optional.empty());
+        when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(User.builder()
+                .email("user@example.com")
+                .provider(AuthProvider.LOCAL)
+                .password("encoded-password")
+                .build()));
+
+        assertThrows(ConflictException.class,
+                () -> customOAuth2UserService.upsertOAuth2User("google", userInfo, Map.of("email", "user@example.com")));
+    }
+
+    @Test
+    void rejectsOAuthLoginWhenEmailIsMissing() {
+        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo("google",
+                Map.of("sub", "google-123", "name", "Google User"));
+
+        assertThrows(InternalAuthenticationServiceException.class,
+                () -> customOAuth2UserService.upsertOAuth2User("google", userInfo, Map.of()));
     }
 }
